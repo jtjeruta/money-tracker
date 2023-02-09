@@ -1,0 +1,7 @@
+{
+  "name": "money-tracker",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
