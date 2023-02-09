@@ -23,29 +23,32 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { AppContextProvider } from './contexts/AppContext';
 
 setupIonicReact();
 
 const App: React.FC = () => {
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            <Route path="/" exact={true}>
-              <Redirect to="/page/Home" />
-            </Route>
-            {appPages.map((route) => (
-              <Route path={route.url} exact={true} key={route.url}>
-                <UserLayout title={route.title}>
-                  <route.component />
-                </UserLayout>
+      <AppContextProvider>
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <Menu />
+            <IonRouterOutlet id="main">
+              <Route path="/" exact={true}>
+                <Redirect to="/page/Home" />
               </Route>
-            ))}
-          </IonRouterOutlet>
-        </IonSplitPane>
-      </IonReactRouter>
+              {appPages.map((route) => (
+                <Route path={route.url} exact={true} key={route.url}>
+                  <UserLayout title={route.title}>
+                    <route.component />
+                  </UserLayout>
+                </Route>
+              ))}
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </IonReactRouter>
+      </AppContextProvider>
     </IonApp>
   );
 };
