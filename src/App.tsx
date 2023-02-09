@@ -21,7 +21,8 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-/* Theme variables */
+/* Theme css */
+import './theme/main.css';
 import './theme/variables.css';
 import { AppContextProvider } from './contexts/AppContext';
 
