@@ -6,7 +6,7 @@ const initialState: Types.State = {
   accounts: [
     {
       name: 'Cash',
-      amount: 0,
+      balance: 0,
     },
   ],
 };
@@ -14,7 +14,7 @@ const initialState: Types.State = {
 const reducer = (state: Types.State, action: Types.Actions) => {
   switch (action.type) {
     case 'Set Accounts':
-      return { ...state, accounts: action.payload };
+      return { ...state, accounts: [...initialState.accounts, ...action.payload] };
     default:
       return state;
   }

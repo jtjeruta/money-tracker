@@ -25,7 +25,7 @@ const Page: React.FC<Props> = (props) => {
           </IonToolbar>
         </IonHeader>
 
-        <div className="p-6">{props.children}</div>
+        <div>{props.children}</div>
       </IonContent>
     </IonPage>
   );

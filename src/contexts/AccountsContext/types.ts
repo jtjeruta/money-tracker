@@ -1,6 +1,6 @@
 export type Account = {
   name: string;
-  amount: number;
+  balance: number;
 };
 
 export type SetStorage = {
