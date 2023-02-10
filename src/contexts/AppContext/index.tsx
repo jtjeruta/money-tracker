@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Storage } from '@ionic/storage';
+import { useQuery } from '@tanstack/react-query';
 import * as Types from './types';
 
 const initialState: Types.State = {
@@ -20,14 +21,15 @@ const AppContext = React.createContext<Types.Context>(null);
 const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const init = async () => {
+  useQuery({
+    queryKey: ['init-store'],
+    queryFn: async () => {
       const storage = new Storage();
       await storage.create();
       dispatch({ type: 'Set Storage', payload: storage });
-    };
-    init();
-  }, []);
+      return storage;
+    },
+  });
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };
