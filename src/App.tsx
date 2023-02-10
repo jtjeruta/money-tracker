@@ -27,32 +27,39 @@ import '@ionic/react/css/display.css';
 /* Theme css */
 import './theme/main.css';
 import './theme/variables.css';
+import { useState } from 'react';
 
 setupIonicReact();
 const queryClient = new QueryClient();
+
+const AppContent: React.FC = () => {
+  return (
+    <IonReactRouter>
+      <IonSplitPane contentId="main">
+        <Menu />
+        <IonRouterOutlet id="main">
+          <Route path="/" exact={true}>
+            <Redirect to="/page/Home" />
+          </Route>
+          {appPages.map((route) => (
+            <Route path={route.url} exact={true} key={route.url}>
+              <UserLayout title={route.title}>
+                <route.component />
+              </UserLayout>
+            </Route>
+          ))}
+        </IonRouterOutlet>
+      </IonSplitPane>
+    </IonReactRouter>
+  );
+};
 
 const App: React.FC = () => {
   return (
     <IonApp>
       <QueryClientProvider client={queryClient}>
         <AppContextProvider>
-          <IonReactRouter>
-            <IonSplitPane contentId="main">
-              <Menu />
-              <IonRouterOutlet id="main">
-                <Route path="/" exact={true}>
-                  <Redirect to="/page/Home" />
-                </Route>
-                {appPages.map((route) => (
-                  <Route path={route.url} exact={true} key={route.url}>
-                    <UserLayout title={route.title}>
-                      <route.component />
-                    </UserLayout>
-                  </Route>
-                ))}
-              </IonRouterOutlet>
-            </IonSplitPane>
-          </IonReactRouter>
+          <AppContent />
         </AppContextProvider>
       </QueryClientProvider>
     </IonApp>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Storage } from '@ionic/storage';
+import { Drivers, Storage } from '@ionic/storage';
 import { useQuery } from '@tanstack/react-query';
+import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import * as Types from './types';
 
 const initialState: Types.State = {
@@ -24,8 +25,11 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useQuery({
     queryKey: ['init-store'],
     queryFn: async () => {
-      const storage = new Storage();
+      const storage = new Storage({
+        driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB, Drivers.LocalStorage],
+      });
       await storage.create();
+      await storage.defineDriver(CordovaSQLiteDriver);
       dispatch({ type: 'Set Storage', payload: storage });
       return storage;
     },
