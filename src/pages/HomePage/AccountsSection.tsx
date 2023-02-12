@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import Section from '../../components/Section';
+import Card from '../../components/Card';
 import { useAccountsContext } from '../../contexts/AccountsContext';
 import { Account } from '../../contexts/AccountsContext/types';
+import { formatMoney } from '../../utils/number';
 
 const AccountsList = () => {
   const AccountsContext = useAccountsContext();
@@ -12,7 +13,7 @@ const AccountsList = () => {
   });
 
   return (
-    <Section title="List of accounts" className="bg-gray-100">
+    <Card title="List of Accounts">
       {isError ? (
         <em className="text-red-500">Error...</em>
       ) : isLoading ? (
@@ -30,14 +31,14 @@ const AccountsList = () => {
           <AddAccountButton />
         </div>
       )}
-    </Section>
+    </Card>
   );
 };
 
 const AccountCard = (props: { account: Account }) => (
   <div className="bg-blue-100 p-2 rounded">
     <p>{props.account.name}</p>
-    <p>{props.account.balance}</p>
+    <p>{formatMoney(props.account.balance)}</p>
   </div>
 );
 

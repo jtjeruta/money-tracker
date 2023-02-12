@@ -1,4 +1,4 @@
-import Section from '../../components/Section';
+import Card from '../../components/Card';
 
 const data = [
   {
@@ -10,14 +10,14 @@ const data = [
 
 const GoalsSection = () => {
   return (
-    <Section title="Goals">
+    <Card title="Goals">
       {data.map((goal) => (
         <div key={goal.id}>
           <p>{goal.name}</p>
           <p>{goal.total}</p>
         </div>
       ))}
-    </Section>
+    </Card>
   );
 };
 

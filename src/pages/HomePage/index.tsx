@@ -6,8 +6,11 @@ import UpcomingPayments from './UpcomingPayments';
 
 const PageContent = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-3 px-3">
       <AccountsSection />
+      <CashFlowSection />
+      <UpcomingPayments />
+      <Goals />
     </div>
   );
 };
@@ -16,9 +19,6 @@ const HomePage = () => {
   return (
     <AccountsContextProvider>
       <PageContent />
-      <CashFlowSection />
-      <UpcomingPayments />
-      <Goals />
     </AccountsContextProvider>
   );
 };

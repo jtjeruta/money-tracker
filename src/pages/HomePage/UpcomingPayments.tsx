@@ -1,4 +1,4 @@
-import Section from '../../components/Section';
+import Card from '../../components/Card';
 
 const data = [
   {
@@ -12,8 +12,7 @@ const data = [
 
 const UpcomingPayments = () => {
   return (
-    <Section title="Upcoming payments this week">
-      <h2>Upcoming Payments</h2>
+    <Card title="Upcoming payments this week">
       <ul>
         {data.map((payment) => (
           <li key={payment.id}>
@@ -23,7 +22,7 @@ const UpcomingPayments = () => {
           </li>
         ))}
       </ul>
-    </Section>
+    </Card>
   );
 };
 

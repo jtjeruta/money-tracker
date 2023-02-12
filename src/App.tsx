@@ -27,7 +27,6 @@ import '@ionic/react/css/display.css';
 /* Theme css */
 import './theme/main.css';
 import './theme/variables.css';
-import { useState } from 'react';
 
 setupIonicReact();
 const queryClient = new QueryClient();

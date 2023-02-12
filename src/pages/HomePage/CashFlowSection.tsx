@@ -1,21 +1,26 @@
-import Section from '../../components/Section';
+import classNames from 'classnames';
+import Card from '../../components/Card';
+import Title from '../../components/Title';
+import { formatMoney } from '../../utils/number';
 
 const CashFlowSection = () => {
+  const data = {
+    income: 27550.0,
+    expenses: 63191,
+  };
+
+  const net = data.income - data.expenses;
+
   return (
-    <Section title="Cash Flow">
-      <div>
-        <p>THIS MONTH</p>
-        <p>0.00</p>
+    <Card>
+      <div className="flex justify-between text-sm">
+        <div className="flex gap-1 items-center">
+          <Title>Cash Flow</Title>
+          <small>(this month)</small>
+        </div>
+        <p className={classNames('font-bold', net < 0 && 'text-red-500')}>{formatMoney(net)}</p>
       </div>
-      <div>
-        <p>Income</p>
-        <p>0.00</p>
-      </div>
-      <div>
-        <p>Expenses</p>
-        <p>0.00</p>
-      </div>
-    </Section>
+    </Card>
   );
 };
 
