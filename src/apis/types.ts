@@ -7,9 +7,10 @@ export type Account = {
 export type Record = {
   id: string;
   name: string;
-  description: string;
+  note: string;
   amount: number;
   date: number;
+  accountId: string;
   plannedPaymentId?: string;
   debtId?: string;
 };

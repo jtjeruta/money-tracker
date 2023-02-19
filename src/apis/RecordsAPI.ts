@@ -6,6 +6,12 @@ export const listRecordsAPI = async () => {
   return records;
 };
 
+export const getRecordAPI = async (recordId: string) => {
+  const records: Record[] = await db.get('records') || [];
+  const record = records.find((r) => r.id === recordId);
+  return record ?? null;
+};
+
 export const addRecordAPI = async (record: Record) => {
   const records: Record[] = await db.get('records') || [];
   const newRecords = [...records, record];

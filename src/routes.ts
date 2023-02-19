@@ -13,14 +13,23 @@ import HomePage from './pages/HomePage';
 import RecordsPage from './pages/RecordsPage';
 import PlannedPaymentsPage from './pages/PlannedPaymentsPage';
 import DebtsPage from './pages/Debts';
+import RecordPage from './pages/RecordPage';
 
-export interface AppPage {
+export type BasePage = {
   url: string;
-  iosIcon: string;
-  mdIcon: string;
   title: string;
   component: FC;
-}
+};
+
+export type MenuPage = BasePage & {
+  showInMenu: true;
+  iosIcon: string;
+  mdIcon: string;
+};
+
+export type HiddenPage = BasePage & { showInMenu: false };
+
+export type AppPage = MenuPage | HiddenPage;
 
 export const appPages: AppPage[] = [
   {
@@ -29,6 +38,7 @@ export const appPages: AppPage[] = [
     iosIcon: homeOutline,
     mdIcon: homeSharp,
     component: HomePage,
+    showInMenu: true,
   },
   {
     title: 'Records',
@@ -36,6 +46,7 @@ export const appPages: AppPage[] = [
     iosIcon: listOutline,
     mdIcon: listSharp,
     component: RecordsPage,
+    showInMenu: true,
   },
   {
     title: 'Planned Payments',
@@ -43,6 +54,7 @@ export const appPages: AppPage[] = [
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
     component: PlannedPaymentsPage,
+    showInMenu: true,
   },
   {
     title: 'Debts',
@@ -50,5 +62,18 @@ export const appPages: AppPage[] = [
     iosIcon: heartOutline,
     mdIcon: heartSharp,
     component: DebtsPage,
+    showInMenu: true,
+  },
+  {
+    title: 'Update Record',
+    url: '/records/:recordId',
+    component: RecordPage,
+    showInMenu: false,
+  },
+  {
+    title: 'New Record',
+    url: '/records/new',
+    component: RecordPage,
+    showInMenu: false,
   },
 ];

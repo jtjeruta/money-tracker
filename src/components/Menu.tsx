@@ -12,7 +12,7 @@ import {
 
 import { useLocation } from 'react-router-dom';
 import { bookmarkOutline } from 'ionicons/icons';
-import { appPages } from '../routes';
+import { appPages, MenuPage } from '../routes';
 import './Menu.css';
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
@@ -20,13 +20,15 @@ const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 const Menu: React.FC = () => {
   const location = useLocation();
 
+  const filteredPages = appPages.filter((page): page is MenuPage => page.showInMenu === true);
+
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
           <IonListHeader>Inbox</IonListHeader>
           <IonNote>hi@ionicframework.com</IonNote>
-          {appPages.map((appPage, index) => {
+          {filteredPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem

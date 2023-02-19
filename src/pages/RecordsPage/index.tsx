@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
+import { useHistory } from 'react-router';
 import { listRecordsAPI } from '../../apis/RecordsAPI';
+import ActionButton from '../../components/ActionButton';
 import Card from '../../components/Card';
 import { formatMoney } from '../../utils/number';
 
 const RecordsPage = () => {
+  const history = useHistory();
   const { isLoading, data, isError } = useQuery({
     queryKey: ['list-records'],
     queryFn: listRecordsAPI,
@@ -36,7 +39,7 @@ const RecordsPage = () => {
               <div className="flex justify-between">
                 <div className="flex flex-col">
                   <div className="text-md font-bold">{record.name}</div>
-                  <div className="text-sm">{record.description}</div>
+                  <div className="text-sm">{record.note}</div>
                 </div>
                 <div className="flex flex-col text-end">
                   <div className="text-md font-bold">{formatMoney(record.amount)}</div>
@@ -49,6 +52,7 @@ const RecordsPage = () => {
       ) : (
         <em className="text-gray-500">No records found</em>
       )}
+      <ActionButton onClick={() => history.push('/records/new')} />
     </div>
   );
 };
