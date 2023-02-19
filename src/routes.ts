@@ -1,7 +1,5 @@
 import { FC } from 'react';
 import {
-  archiveOutline,
-  archiveSharp,
   heartOutline,
   heartSharp,
   homeOutline,
@@ -10,13 +8,11 @@ import {
   listSharp,
   paperPlaneOutline,
   paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
 } from 'ionicons/icons';
-import Page from './pages/Page';
 import HomePage from './pages/HomePage';
+import RecordsPage from './pages/RecordsPage';
+import PlannedPaymentsPage from './pages/PlannedPaymentsPage';
+import DebtsPage from './pages/Debts';
 
 export interface AppPage {
   url: string;
@@ -29,51 +25,30 @@ export interface AppPage {
 export const appPages: AppPage[] = [
   {
     title: 'Home',
-    url: '/page/Home',
+    url: '/home',
     iosIcon: homeOutline,
     mdIcon: homeSharp,
     component: HomePage,
   },
   {
     title: 'Records',
-    url: '/page/Records',
+    url: '/records',
     iosIcon: listOutline,
     mdIcon: listSharp,
-    component: Page,
+    component: RecordsPage,
   },
   {
-    title: 'Outbox',
-    url: '/page/Outbox',
+    title: 'Planned Payments',
+    url: '/planned-payments',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
-    component: Page,
+    component: PlannedPaymentsPage,
   },
   {
-    title: 'Favorites',
-    url: '/page/Favorites',
+    title: 'Debts',
+    url: '/debts',
     iosIcon: heartOutline,
     mdIcon: heartSharp,
-    component: Page,
-  },
-  {
-    title: 'Archived',
-    url: '/page/Archived',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-    component: Page,
-  },
-  {
-    title: 'Trash',
-    url: '/page/Trash',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-    component: Page,
-  },
-  {
-    title: 'Spam',
-    url: '/page/Spam',
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
-    component: Page,
+    component: DebtsPage,
   },
 ];
