@@ -6,7 +6,7 @@ import UpcomingPayments from './UpcomingPayments';
 
 const PageContent = () => {
   return (
-    <div className="flex flex-col gap-3 px-3">
+    <div className="flex flex-col gap-3 p-3">
       <AccountsSection />
       <CashFlowSection />
       <UpcomingPayments />
