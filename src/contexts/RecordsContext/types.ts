@@ -4,6 +4,8 @@ export type Record = {
   description: string;
   amount: number;
   date: number;
+  plannedPaymentId?: string;
+  debtId?: string;
 };
 
 export type Context = {
