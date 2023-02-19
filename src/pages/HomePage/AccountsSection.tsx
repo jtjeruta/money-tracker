@@ -1,15 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
+import { listAccountsAPI } from '../../apis/AccountsAPI';
+import { Account } from '../../apis/types';
 import Card from '../../components/Card';
-import { useAccountsContext } from '../../contexts/AccountsContext';
-import { Account } from '../../contexts/AccountsContext/types';
 import { formatMoney } from '../../utils/number';
 
 const AccountsList = () => {
-  const AccountsContext = useAccountsContext();
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ['list-accounts'],
-    queryFn: AccountsContext?.listAccounts,
+    queryFn: listAccountsAPI,
   });
 
   return (

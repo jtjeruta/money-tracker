@@ -2,11 +2,11 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/r
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import { QueryClient } from '@tanstack/query-core';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import Menu from './components/Menu';
 import { appPages } from './routes';
 import UserLayout from './components/UserLayout';
-import { AppContextProvider } from './contexts/AppContext';
+import { initDb } from './utils/db';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,6 +32,11 @@ setupIonicReact();
 const queryClient = new QueryClient();
 
 const AppContent: React.FC = () => {
+  useQuery({
+    queryKey: ['init-db'],
+    queryFn: initDb,
+  });
+
   return (
     <IonReactRouter>
       <IonSplitPane contentId="main">
@@ -57,9 +62,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <QueryClientProvider client={queryClient}>
-        <AppContextProvider>
-          <AppContent />
-        </AppContextProvider>
+        <AppContent />
       </QueryClientProvider>
     </IonApp>
   );

@@ -1,10 +1,9 @@
-import { AccountsContextProvider } from '../../contexts/AccountsContext';
 import AccountsSection from './AccountsSection';
 import CashFlowSection from './CashFlowSection';
 import Goals from './Goals';
 import UpcomingPayments from './UpcomingPayments';
 
-const PageContent = () => {
+const HomePage = () => {
   return (
     <div className="flex flex-col gap-3 p-3">
       <AccountsSection />
@@ -12,14 +11,6 @@ const PageContent = () => {
       <UpcomingPayments />
       <Goals />
     </div>
-  );
-};
-
-const HomePage = () => {
-  return (
-    <AccountsContextProvider>
-      <PageContent />
-    </AccountsContextProvider>
   );
 };
 
