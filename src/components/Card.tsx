@@ -11,7 +11,7 @@ export interface CardProps {
 const Card = (props: CardProps) => {
   const { className, children, title } = props;
 
-  const classes = classNames('bg-blue-100 shadow-md rounded-md p-3', className);
+  const classes = classNames('bg-blue-100 dark:bg-slate-800 shadow-md rounded-md p-3', className);
 
   return (
     <div className={classes}>

@@ -5,7 +5,7 @@ type Props = {
 };
 
 const Title: FC<Props> = (props) => {
-  return <h3 className="text-md font-bold leading-none tracking-tight text-gray-900">{props.children}</h3>;
+  return <h3 className="text-md font-bold leading-none tracking-tight text-gray-900 dark:text-white">{props.children}</h3>;
 };
 
 export default Title;
