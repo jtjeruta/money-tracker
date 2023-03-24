@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import {
+  cardOutline,
+  cardSharp,
   heartOutline,
   heartSharp,
   homeOutline,
@@ -14,6 +16,7 @@ import RecordsPage from './pages/RecordsPage';
 import PlannedPaymentsPage from './pages/PlannedPaymentsPage';
 import DebtsPage from './pages/Debts';
 import RecordPage from './pages/RecordPage';
+import AccountsPage from './pages/AccountsPage';
 
 export type BasePage = {
   url: string;
@@ -75,5 +78,13 @@ export const appPages: AppPage[] = [
     url: '/records/new',
     component: RecordPage,
     showInMenu: false,
+  },
+  {
+    title: 'Accounts',
+    url: '/accounts',
+    iosIcon: cardOutline,
+    mdIcon: cardSharp,
+    component: AccountsPage,
+    showInMenu: true,
   },
 ];
