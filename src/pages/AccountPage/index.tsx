@@ -23,7 +23,6 @@ const AccountPage = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const { accountId } = useParams<{ accountId: string }>();
-  const isNew = accountId === 'new';
   const methods = useForm<FormData>({ resolver: yupResolver(schema), defaultValues: { name: '', balance: 0 } });
 
   const [accountQuery] = useQueries({
@@ -49,7 +48,7 @@ const AccountPage = () => {
   });
 
   const onSubmit = (data: FormData) => {
-    const id = isNew ? uuidv4() : accountId;
+    const id = accountId ?? uuidv4();
     accountMutation.mutate({ id, ...data });
   };
 

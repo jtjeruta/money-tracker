@@ -1,9 +1,19 @@
 import { ReactNode } from 'react';
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  IonBackButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/react';
 
 type Props = {
   children: ReactNode;
   title: string;
+  backUrl?: string;
 };
 
 const Page: React.FC<Props> = (props) => {
@@ -11,10 +21,15 @@ const Page: React.FC<Props> = (props) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
+          {props.backUrl && (
+            <IonButtons slot="start">
+              <IonBackButton defaultHref="/" />
+            </IonButtons>
+          )}
+          <IonTitle>{props.title}</IonTitle>
+          <IonButtons slot="end">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>{props.title}</IonTitle>
         </IonToolbar>
       </IonHeader>
 

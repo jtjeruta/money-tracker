@@ -47,7 +47,7 @@ const DebtsPage = () => {
           );
         })
       ) : (
-        <em className="text-gray-500">No debts found</em>
+        <Card>No debts found</Card>
       )}
     </div>
   );

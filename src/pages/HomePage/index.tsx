@@ -5,9 +5,9 @@ import UpcomingPayments from './UpcomingPayments';
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col gap-3 p-3">
-      <AccountsSection />
+    <div className="flex flex-col gap-3 px-3">
       <CashFlowSection />
+      <AccountsSection />
       <UpcomingPayments />
       <Goals />
     </div>

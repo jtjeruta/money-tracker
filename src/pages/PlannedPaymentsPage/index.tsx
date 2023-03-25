@@ -47,7 +47,7 @@ const PlannedPaymentsPage = () => {
           );
         })
       ) : (
-        <em className="text-gray-500">No planned payments found</em>
+        <Card>No planned payments found</Card>
       )}
     </div>
   );

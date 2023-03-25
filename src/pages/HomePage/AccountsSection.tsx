@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useHistory } from 'react-router';
 import { listAccountsAPI } from '../../apis/AccountsAPI';
@@ -34,12 +35,15 @@ const AccountsList = () => {
   );
 };
 
-const AccountCard = (props: { account: Account }) => (
-  <div className="bg-blue-100 dark:bg-slate-900 p-2 rounded">
-    <p>{props.account.name}</p>
-    <p>{formatMoney(props.account.balance)}</p>
-  </div>
-);
+const AccountCard: FC<{ account: Account }> = ({ account }) => {
+  const history = useHistory();
+  return (
+    <div onClick={() => history.push(`/accounts/${account.id}`)} className="bg-blue-100 dark:bg-slate-900 p-2 rounded">
+      <p>{account.name}</p>
+      <p>{formatMoney(account.balance)}</p>
+    </div>
+  );
+};
 
 const AccountCardSkeleton = () => (
   <div className="bg-blue-100 dark:bg-slate-900 p-2 rounded animate-pulse">

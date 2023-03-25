@@ -50,7 +50,7 @@ const RecordsPage = () => {
           );
         })
       ) : (
-        <em className="text-gray-500">No records found</em>
+        <Card>No records found</Card>
       )}
       <ActionButton onClick={() => history.push('/records/new')} />
     </div>

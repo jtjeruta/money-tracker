@@ -23,6 +23,7 @@ export type BasePage = {
   url: string;
   title: string;
   component: FC;
+  backUrl?: string;
 };
 
 export type MenuPage = BasePage & {
@@ -73,24 +74,28 @@ export const appPages: AppPage[] = [
     url: '/records/:recordId',
     component: RecordPage,
     showInMenu: false,
+    backUrl: '/records',
   },
   {
     title: 'New Record',
     url: '/records/new',
     component: RecordPage,
     showInMenu: false,
+    backUrl: '/records',
   },
   {
     title: 'Update Account',
     url: '/accounts/:accountId',
     component: AccountPage,
     showInMenu: false,
+    backUrl: '/accounts',
   },
   {
     title: 'New Account',
     url: '/accounts/new',
     component: AccountPage,
     showInMenu: false,
+    backUrl: '/accounts',
   },
   {
     title: 'Accounts',
