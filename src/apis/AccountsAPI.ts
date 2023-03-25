@@ -6,16 +6,16 @@ export const listAccountsAPI = async () => {
   return accounts;
 };
 
-export const addAccountAPI = async (account: Account) => {
+export const getAccountAPI = async (id: string) => {
   const accounts: Account[] = await db.get('accounts') || [];
-  const newAccounts = [...accounts, account];
-  await db.set('accounts', newAccounts);
-  return account;
+  const account = accounts.find((a) => a.id === id);
+  return account || null;
 };
 
-export const updateAccountAPI = async (account: Account) => {
+export const upsertAccountAPI = async (account: Account) => {
   const accounts: Account[] = await db.get('accounts') || [];
-  const newAccounts = accounts.map((a) => (a.id === account.id ? account : a));
+  const filteredAccounts = accounts.filter((a) => a.id !== account.id);
+  const newAccounts = [...filteredAccounts, account];
   await db.set('accounts', newAccounts);
   return account;
 };

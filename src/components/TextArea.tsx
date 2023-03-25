@@ -4,9 +4,9 @@ import FormGroup, { FormGroupProps } from './FormGroup';
 
 type Props = FormGroupProps & React.ComponentProps<typeof IonTextarea>;
 
-const TextArea: FC<Props> = ({ label, helperText, error, errorText, ...props }) => {
+const TextArea: FC<Props> = ({ label, helperText, ...props }) => {
   return (
-    <FormGroup {...{ label, helperText, error, errorText }}>
+    <FormGroup {...{ label, helperText, name: props.name }}>
       <div className="border pl-3">
         <IonTextarea {...props} />
       </div>

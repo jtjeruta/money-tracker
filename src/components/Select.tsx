@@ -10,9 +10,9 @@ type Props = FormGroupProps &
     }[];
   };
 
-const Select: FC<Props> = ({ label, helperText, error, errorText, options, ...props }) => {
+const Select: FC<Props> = ({ label, helperText, options, ...props }) => {
   return (
-    <FormGroup {...{ label, helperText, error, errorText }}>
+    <FormGroup {...{ label, helperText, name: props.name }}>
       <IonSelect style={{ padding: 13 }} className="border" {...props}>
         {options.map((option) => (
           <IonSelectOption value={option.value}>{option.label}</IonSelectOption>

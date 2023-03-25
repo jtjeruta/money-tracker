@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import moment from 'moment';
 import { useHistory } from 'react-router';
 import { listAccountsAPI } from '../../apis/AccountsAPI';
 import ActionButton from '../../components/ActionButton';
@@ -16,37 +15,34 @@ const AccountsPage = () => {
   return (
     <div className="flex flex-col gap-3 px-3">
       {isError ? (
-        <em className="text-red-500">Error...</em>
+        <Card className="text-red-500">Something went wrong</Card>
       ) : isLoading ? (
-        Array.of(5).map((_, index) => (
-          <Card key={index}>
-            <div className="flex justify-between">
-              <div className="flex flex-col">
-                <div className="text-md font-bold animate-pulse">Loading...</div>
-              </div>
-              <div className="flex flex-col text-end">
-                <div className="text-md font-bold animate-pulse">Loading...</div>
-              </div>
+        <Card>
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <div className="text-md font-bold animate-pulse">Loading...</div>
             </div>
-          </Card>
-        ))
+          </div>
+        </Card>
       ) : data.length > 0 ? (
-        data.map((account) => {
-          return (
-            <Card key={account.id}>
-              <div className="flex justify-between">
-                <div className="flex flex-col">
-                  <div className="text-md font-bold">{account.name}</div>
+        data
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((account) => {
+            return (
+              <Card key={account.id} onClick={() => history.push(`/accounts/${account.id}`)}>
+                <div className="flex justify-between">
+                  <div className="flex flex-col">
+                    <div className="text-md font-bold">{account.name}</div>
+                  </div>
+                  <div className="flex flex-col text-end">
+                    <div className="text-md font-bold">{formatMoney(account.balance)}</div>
+                  </div>
                 </div>
-                <div className="flex flex-col text-end">
-                  <div className="text-md font-bold">{formatMoney(account.balance)}</div>
-                </div>
-              </div>
-            </Card>
-          );
-        })
+              </Card>
+            );
+          })
       ) : (
-        <em className="text-gray-500">No accounts found</em>
+        <Card>No accounts found</Card>
       )}
       <ActionButton onClick={() => history.push('/accounts/new')} />
     </div>

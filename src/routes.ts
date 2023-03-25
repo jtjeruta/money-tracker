@@ -17,6 +17,7 @@ import PlannedPaymentsPage from './pages/PlannedPaymentsPage';
 import DebtsPage from './pages/Debts';
 import RecordPage from './pages/RecordPage';
 import AccountsPage from './pages/AccountsPage';
+import AccountPage from './pages/AccountPage';
 
 export type BasePage = {
   url: string;
@@ -77,6 +78,18 @@ export const appPages: AppPage[] = [
     title: 'New Record',
     url: '/records/new',
     component: RecordPage,
+    showInMenu: false,
+  },
+  {
+    title: 'Update Account',
+    url: '/accounts/:accountId',
+    component: AccountPage,
+    showInMenu: false,
+  },
+  {
+    title: 'New Account',
+    url: '/accounts/new',
+    component: AccountPage,
     showInMenu: false,
   },
   {
