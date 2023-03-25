@@ -19,13 +19,7 @@ const Page: React.FC<Props> = (props) => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">{props.title}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
-        <div>{props.children}</div>
+        <div className="py-3">{props.children}</div>
       </IonContent>
     </IonPage>
   );
