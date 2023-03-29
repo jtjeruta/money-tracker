@@ -1,4 +1,3 @@
-import { IonButton } from '@ionic/react';
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useHistory, useParams } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -10,6 +9,7 @@ import { getAccountAPI } from '../../apis/AccountsAPI';
 import { Account } from '../../apis/types';
 import Input from '../../components/Input';
 import Card from '../../components/Card';
+import FormActions from '../../components/FormActions';
 
 const schema = yup
   .object({
@@ -66,14 +66,7 @@ const AccountPage = () => {
         <div className="flex flex-col gap-3 px-3">
           <Input label="Name" name="name" />
           <Input label="Balance" name="balance" type="number" />
-          <div className="flex gap-3">
-            <IonButton type="button" color="medium" fill="outline" className="grow" onClick={() => history.goBack()}>
-              Cancel
-            </IonButton>
-            <IonButton type="submit" color="primary" className="grow">
-              Save
-            </IonButton>
-          </div>
+          <FormActions />
         </div>
       </form>
     </FormProvider>

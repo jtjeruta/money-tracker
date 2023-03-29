@@ -1,5 +1,6 @@
-import { IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { pencilSharp, trashBinSharp } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import { deleteAccountAPI, listAccountsAPI } from '../../apis/AccountsAPI';
 import ActionButton from '../../components/ActionButton';
@@ -51,10 +52,10 @@ const AccountsPage = () => {
 
                   <IonItemOptions>
                     <IonItemOption color="primary" onClick={() => history.push(`/accounts/${account.id}`)}>
-                      Edit
+                      <IonIcon icon={pencilSharp} className="p-3" />
                     </IonItemOption>
                     <IonItemOption color="danger" onClick={handleDelete(account.id)}>
-                      Delete
+                      <IonIcon icon={trashBinSharp} className="p-3" />
                     </IonItemOption>
                   </IonItemOptions>
                 </IonItemSliding>

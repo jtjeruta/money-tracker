@@ -12,16 +12,10 @@ export const getRecordAPI = async (recordId: string) => {
   return record ?? null;
 };
 
-export const addRecordAPI = async (record: Record) => {
+export const upsertRecordAPI = async (record: Record) => {
   const records: Record[] = await db.get('records') || [];
-  const newRecords = [...records, record];
-  await db.set('records', newRecords);
-  return record;
-};
-
-export const updateRecordAPI = async (record: Record) => {
-  const records: Record[] = await db.get('records') || [];
-  const newRecords = records.map((r) => (r.id === record.id ? record : r));
+  const filteredRecords = records.filter((r) => r.id !== record.id);
+  const newRecords = [...filteredRecords, record];
   await db.set('records', newRecords);
   return record;
 };

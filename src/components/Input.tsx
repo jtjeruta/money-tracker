@@ -3,7 +3,7 @@ import { IonInput } from '@ionic/react';
 import { useFormContext } from 'react-hook-form';
 import FormGroup, { FormGroupProps } from './FormGroup';
 
-type Props = FormGroupProps & React.ComponentProps<typeof IonInput>;
+type Props = FormGroupProps & React.ComponentProps<typeof IonInput> & { type?: 'text' | 'number' };
 
 const Input: FC<Props> = ({ label, helperText, ...props }) => {
   const methods = useFormContext();
