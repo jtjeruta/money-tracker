@@ -1,55 +1,105 @@
-import { useQuery } from '@tanstack/react-query';
+import { FC, useRef } from 'react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { pencilSharp, trashBinSharp } from 'ionicons/icons';
 import moment from 'moment';
-import { listPlannedPaymentsAPI } from '../../apis/PlannedPaymentAPI';
+import { useHistory } from 'react-router';
+import { deletePlannedPaymentAPI, listPlannedPaymentsAPI } from '../../apis/PlannedPaymentsAPI';
+import ActionButton from '../../components/ActionButton';
 import Card from '../../components/Card';
+import { useConfirm } from '../../hooks/useConfirm';
 import { formatMoney } from '../../utils/number';
+import { PlannedPayment } from '../../apis/types';
+import { useAlert } from '../../hooks/useAlert';
 
 const PlannedPaymentsPage = () => {
+  const history = useHistory();
   const { isLoading, data, isError } = useQuery({
-    queryKey: ['list-planned-payments'],
+    queryKey: ['list-payments'],
     queryFn: listPlannedPaymentsAPI,
   });
 
   return (
     <div className="flex flex-col gap-3 px-3">
       {isError ? (
-        <em className="text-red-500">Error...</em>
+        <Card className="text-red-500">Something went wrong</Card>
       ) : isLoading ? (
-        Array.of(5).map((_, index) => (
-          <Card key={index}>
-            <div className="flex justify-between">
-              <div className="flex flex-col">
-                <div className="text-md font-bold animate-pulse">Loading...</div>
-                <div className="text-sm animate-pulse">Loading...</div>
-              </div>
-              <div className="flex flex-col text-end">
-                <div className="text-md font-bold animate-pulse">Loading...</div>
-                <div className="text-sm animate-pulse">Loading...</div>
-              </div>
+        <Card>
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <div className="text-md font-bold animate-pulse">Loading...</div>
             </div>
-          </Card>
-        ))
+          </div>
+        </Card>
       ) : data.length > 0 ? (
-        data.map((plannedPayment) => {
-          return (
-            <Card key={plannedPayment.id}>
-              <div className="flex justify-between">
-                <div className="flex flex-col">
-                  <div className="text-md font-bold">{plannedPayment.name}</div>
-                  <div className="text-sm">{plannedPayment.description}</div>
-                </div>
-                <div className="flex flex-col text-end">
-                  <div className="text-md font-bold">{formatMoney(plannedPayment.amount)}</div>
-                  <div className="text-sm">{moment().format('MMM DD')}</div>
-                </div>
-              </div>
-            </Card>
-          );
-        })
+        <IonList>
+          {data
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((payment) => (
+              <SlidingItem key={payment.id} payment={payment} />
+            ))}
+        </IonList>
       ) : (
-        <Card>No planned payments found</Card>
+        <Card>No payments found</Card>
       )}
+      <ActionButton onClick={() => history.push('/planned-payments/new')} />
     </div>
+  );
+};
+
+const SlidingItem: FC<{ payment: PlannedPayment }> = ({ payment }) => {
+  const history = useHistory();
+  const queryClient = useQueryClient();
+  const alert = useAlert();
+  const confirm = useConfirm();
+  const slidingRef = useRef<HTMLIonItemSlidingElement>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: deletePlannedPaymentAPI,
+    onSuccess: async () => queryClient.invalidateQueries({ queryKey: ['list-payments'] }),
+    onError: () => alert('Failed to delete payment'),
+  });
+
+  const handleDelete = (paymentId: string) => () => {
+    confirm('Are you sure you want to delete this payment?', () => deleteMutation.mutate(paymentId));
+  };
+
+  return (
+    <IonItemSliding key={payment.id} ref={slidingRef}>
+      <IonItem>
+        <div className="flex gap-3 justify-between w-full py-3">
+          <div>
+            <IonLabel>{payment.name}</IonLabel>
+            <IonLabel>
+              {payment.recurrence === 'once'
+                ? 'Just once'
+                : payment.recurrence === 'monthly'
+                ? 'Every month'
+                : 'Every year'}
+            </IonLabel>
+          </div>
+          <div>
+            <IonLabel className="text-right">{formatMoney(payment.amount)}</IonLabel>
+            <IonLabel className="text-right">{moment(payment.paymentDate * 1000).format('MMM DD, YYYY')}</IonLabel>
+          </div>
+        </div>
+      </IonItem>
+
+      <IonItemOptions>
+        <IonItemOption
+          color="primary"
+          onClick={() => {
+            slidingRef.current?.close();
+            history.push(`/planned-payments/${payment.id}`);
+          }}
+        >
+          <IonIcon icon={pencilSharp} className="p-3" />
+        </IonItemOption>
+        <IonItemOption color="danger" onClick={handleDelete(payment.id)}>
+          <IonIcon icon={trashBinSharp} className="p-3" />
+        </IonItemOption>
+      </IonItemOptions>
+    </IonItemSliding>
   );
 };
 

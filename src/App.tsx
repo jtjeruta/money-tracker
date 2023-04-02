@@ -47,7 +47,7 @@ const AppContent: React.FC = () => {
           </Route>
           {appPages.map((route) => (
             <Route path={route.url} exact={true} key={route.url}>
-              <UserLayout title={route.title} backUrl={route.backUrl}>
+              <UserLayout title={route.title} showBackButton={route.showBackButton}>
                 <route.component />
               </UserLayout>
             </Route>

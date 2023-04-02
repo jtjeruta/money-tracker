@@ -13,7 +13,7 @@ import {
 type Props = {
   children: ReactNode;
   title: string;
-  backUrl?: string;
+  showBackButton?: boolean;
 };
 
 const Page: React.FC<Props> = (props) => {
@@ -21,7 +21,7 @@ const Page: React.FC<Props> = (props) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          {props.backUrl && (
+          {props.showBackButton && (
             <IonButtons slot="start">
               <IonBackButton defaultHref="/" />
             </IonButtons>

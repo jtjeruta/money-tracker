@@ -28,20 +28,9 @@ export type Debt = {
 export type PlannedPayment = {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   amount: number;
-} & (
-  | {
-      recurrence: 'once';
-      date: number;
-    }
-  | {
-      recurrence: 'monthly';
-      day: number;
-    }
-  | {
-      recurrence: 'yearly';
-      month: number;
-      day: number;
-    }
-);
+  recurrence: 'once' | 'monthly' | 'yearly';
+  paymentDate: number;
+  accountId?: string;
+};

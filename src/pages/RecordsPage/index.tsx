@@ -45,7 +45,7 @@ const RecordsPage = () => {
               return (
                 <IonItemSliding key={record.id}>
                   <IonItem>
-                    <div className="flex justify-between py-3 w-full">
+                    <div className="flex gap-3 justify-between py-3 w-full">
                       <div className="flex flex-col">
                         <div className="text-md">{record.name}</div>
                         <div className="text-sm">{record.note}</div>
