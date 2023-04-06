@@ -61,6 +61,7 @@ const RecordPage = () => {
     mutationFn: upsertRecordAPI,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['list-records'] });
+      await queryClient.invalidateQueries({ queryKey: ['list-accounts'] });
       history.goBack();
     },
   });

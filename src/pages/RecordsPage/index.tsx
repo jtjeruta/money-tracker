@@ -20,7 +20,10 @@ const RecordsPage = () => {
 
   const deleteMutation = useMutation({
     mutationFn: deleteRecordAPI,
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: ['list-records'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['list-records'] });
+      queryClient.invalidateQueries({ queryKey: ['list-accounts'] });
+    },
   });
 
   const handleDelete = (id: string) => () => {
