@@ -13,8 +13,8 @@ type Props = FormGroupProps &
 
 const Select: FC<Props> = ({ label, helperText, options, ...props }) => {
   const methods = useFormContext();
-  const register = methods?.register(props.name);
-  const inputProps = { ...props, ...register };
+  const { onChange, onBlur, ...register } = methods?.register(props.name);
+  const inputProps = { ...props, onIonChange: onChange, onIonBlur: onBlur, ...register };
   return (
     <FormGroup {...{ label, helperText, name: props.name }}>
       <IonSelect style={{ padding: 13 }} className="border" {...inputProps}>

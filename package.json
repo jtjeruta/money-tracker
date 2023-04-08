@@ -55,7 +55,7 @@
     "start": "docker compose -f docker-compose.dev.yml up",
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
+    "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)' --bail",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

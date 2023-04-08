@@ -1,8 +1,9 @@
 import { Drivers, Storage } from '@ionic/storage';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+const dbName = process.env.NODE_ENV === 'production' ? '__money_tracker' : '__money_tracker_dev';
 
 const storage = new Storage({
-  name: '__mydb',
+  name: dbName,
   driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage, CordovaSQLiteDriver._driver],
 });
 

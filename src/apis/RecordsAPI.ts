@@ -22,42 +22,63 @@ export const upsertRecordAPI = async (record: Record) => {
   const newRecords = [...filteredRecords, record];
   await db.set('records', newRecords);
 
+  function getUpdatedAccounts(account: Account, amount: number) {
+    const filteredAccounts = accounts.filter((a) => a.id !== account.id);
+    const balance = account.balance + amount;
+    const newAccount = { ...account, balance };
+    accounts = [...filteredAccounts, newAccount];
+  }
+
   // update old account
   const oldAccount = accounts.find((a) => a.id === foundRecord?.accountId);
-  if (oldAccount) {
-    const filteredAccounts = accounts.filter((a) => a.id !== oldAccount.id);
-    const newAccount = { ...oldAccount, balance: oldAccount.balance - (foundRecord?.amount ?? 0) };
-    accounts = [...filteredAccounts, newAccount];
-    await db.set('accounts', accounts);
-  }
+  let amount = foundRecord?.type === 'income' ? -(foundRecord?.amount ?? 0) : foundRecord?.amount ?? 0;
+  oldAccount && foundRecord && getUpdatedAccounts(oldAccount, amount);
+
+  // update old transfer account
+  const oldTransferAccount = accounts.find((a) => a.id === foundRecord?.transferAccountId);
+  oldTransferAccount && foundRecord && getUpdatedAccounts(oldTransferAccount, -foundRecord.amount);
 
   // update new account
   const newAccount = accounts.find((a) => a.id === record.accountId);
-  if (newAccount) {
-    const filteredAccounts = accounts.filter((a) => a.id !== newAccount.id);
-    const updatedAccount = { ...newAccount, balance: newAccount.balance + record.amount };
-    accounts = [...filteredAccounts, updatedAccount];
-    await db.set('accounts', accounts);
-  }
+  amount = record.type === 'income' ? record.amount : -record.amount;
+  newAccount && getUpdatedAccounts(newAccount, amount);
 
+  // update new transfer account
+  const newTransferAccount = accounts.find((a) => a.id === record.transferAccountId);
+  newTransferAccount && getUpdatedAccounts(newTransferAccount, record.amount);
+
+  await db.set('accounts', accounts);
   return record;
 };
 
 export const deleteRecordAPI = async (recordId: string) => {
   const records: Record[] = (await db.get('records')) || [];
-  const accounts: Account[] = (await db.get('accounts')) || [];
+  let accounts: Account[] = (await db.get('accounts')) || [];
 
   const foundRecord = records.find((r) => r.id === recordId);
   const foundAccount = accounts.find((a) => a.id === foundRecord?.accountId);
+  const foundTransferAccount = accounts.find((a) => a.id === foundRecord?.transferAccountId);
 
-  const filteredRecords = accounts.filter((a) => a.id !== foundAccount?.id);
-  const filteredAccounts = records.filter((r) => r.id !== recordId);
+  const filteredRecords = records.filter((a) => a.id !== recordId);
 
-  if (foundAccount) {
-    const newAccount = { ...foundAccount, balance: foundAccount?.balance - (foundRecord?.amount ?? 0) };
-    const newAccounts = [...filteredAccounts, newAccount];
-    await db.set('accounts', newAccounts);
+  if (foundAccount && foundRecord) {
+    const filteredAccounts = accounts.filter((r) => r.id !== foundAccount?.id);
+    const balance =
+      foundRecord.type === 'income'
+        ? foundAccount.balance - foundRecord?.amount
+        : foundAccount.balance + foundRecord?.amount;
+
+    const newAccount = { ...foundAccount, balance };
+    accounts = [...filteredAccounts, newAccount];
   }
 
+  if (foundTransferAccount && foundRecord) {
+    const filteredAccounts = accounts.filter((r) => r.id !== foundTransferAccount?.id);
+    const balance = foundTransferAccount.balance - foundRecord?.amount;
+    const newAccount = { ...foundTransferAccount, balance };
+    accounts = [...filteredAccounts, newAccount];
+  }
+
+  await db.set('accounts', accounts);
   await db.set('records', filteredRecords);
 };

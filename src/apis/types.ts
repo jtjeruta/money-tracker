@@ -6,13 +6,15 @@ export type Account = {
 
 export type Record = {
   id: string;
-  name: string;
+  name?: string;
   note?: string;
   amount: number;
   date: number;
   accountId: string;
   plannedPaymentId?: string;
   debtId?: string;
+  type: 'income' | 'expense' | 'transfer';
+  transferAccountId?: string;
 };
 
 export type Debt = {
