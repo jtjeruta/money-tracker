@@ -4,6 +4,21 @@ import { Record } from '../../apis/types';
 import '../helper';
 
 describe('RecordsAPI: create record', () => {
+  it('should create a new record', async () => {
+    const record: Record = {
+      id: '1',
+      name: 'Record 1',
+      amount: 100,
+      date: 12345,
+      type: 'income',
+      accountId: '1',
+    };
+    const result = await RecordsAPI.upsertRecordAPI(record);
+    expect(result).toEqual(record);
+  });
+});
+
+describe('RecordsAPI: update record', () => {
   beforeEach(async () => {
     await AccountsAPI.upsertAccountAPI({
       id: '1',
@@ -16,19 +31,6 @@ describe('RecordsAPI: create record', () => {
       name: 'Account 2',
       balance: 100,
     });
-  });
-
-  it('should create a new record', async () => {
-    const record: Record = {
-      id: '1',
-      name: 'Record 1',
-      amount: 100,
-      date: 12345,
-      type: 'income',
-      accountId: '1',
-    };
-    const result = await RecordsAPI.upsertRecordAPI(record);
-    expect(result).toEqual(record);
   });
 
   it('should update an existing record', async () => {
@@ -105,27 +107,6 @@ describe('RecordsAPI: create record', () => {
       id: '1',
       name: 'Account 1',
       balance: 300,
-    });
-  });
-
-  it('should update account balance when delete an existing record', async () => {
-    const record: Record = {
-      id: '1',
-      name: 'Record 1',
-      amount: 100,
-      date: 12345,
-      type: 'income',
-      accountId: '1',
-    };
-
-    await RecordsAPI.upsertRecordAPI(record);
-    await RecordsAPI.deleteRecordAPI('1');
-
-    const account = await AccountsAPI.getAccountAPI('1');
-    expect(account).toEqual({
-      id: '1',
-      name: 'Account 1',
-      balance: 100,
     });
   });
 
@@ -306,6 +287,43 @@ describe('RecordsAPI: create record', () => {
       id: '2',
       name: 'Account 2',
       balance: -100,
+    });
+  });
+});
+
+describe('RecordsAPI: delete record', () => {
+  beforeEach(async () => {
+    await AccountsAPI.upsertAccountAPI({
+      id: '1',
+      name: 'Account 1',
+      balance: 100,
+    });
+
+    await AccountsAPI.upsertAccountAPI({
+      id: '2',
+      name: 'Account 2',
+      balance: 100,
+    });
+  });
+
+  it('should update account balance when delete an existing record', async () => {
+    const record: Record = {
+      id: '1',
+      name: 'Record 1',
+      amount: 100,
+      date: 12345,
+      type: 'income',
+      accountId: '1',
+    };
+
+    await RecordsAPI.upsertRecordAPI(record);
+    await RecordsAPI.deleteRecordAPI('1');
+
+    const account = await AccountsAPI.getAccountAPI('1');
+    expect(account).toEqual({
+      id: '1',
+      name: 'Account 1',
+      balance: 100,
     });
   });
 

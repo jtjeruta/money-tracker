@@ -1,49 +1,32 @@
 import db from '../utils/db';
-import { Debt } from './types';
+import { Debt, Record } from './types';
 
 export const listDebtsAPI = async () => {
-  const debts: Debt[] = await db.get('debts') || [];
+  const debts: Debt[] = (await db.get('debts')) || [];
   return debts;
 };
 
-export const addDebtAPI = async (debt: Debt) => {
-  const debts: Debt[] = await db.get('debts') || [];
-  const newDebts = [...debts, debt];
-  await db.set('debts', newDebts);
-  return debt;
+export const getDebtAPI = async (debtId: string) => {
+  const debts: Debt[] = (await db.get('debts')) || [];
+  const debt = debts.find((d) => d.id === debtId);
+  return debt || null;
 };
 
-export const updateDebtAPI = async (debt: Debt) => {
-  const debts: Debt[] = await db.get('debts') || [];
-  const newDebts = debts.map((d) => (d.id === debt.id ? debt : d));
+export const upsertDebtAPI = async (debt: Debt) => {
+  const debts: Debt[] = (await db.get('debts')) || [];
+  const filteredDebts = debts.filter((d) => d.id !== debt.id);
+  const newDebts = [...filteredDebts, debt];
   await db.set('debts', newDebts);
   return debt;
 };
 
 export const deleteDebtAPI = async (debtId: string) => {
-  const debts: Debt[] = await db.get('debts') || [];
+  const debts: Debt[] = (await db.get('debts')) || [];
+  const records: Record[] = (await db.get('records')) || [];
+
+  const filteredRecords = records.filter((r) => r.debtId !== debtId);
+  await db.set('records', filteredRecords);
+
   const newDebts = debts.filter((d) => d.id !== debtId);
-  await db.set('debts', newDebts);
-};
-
-export const payDebtAPI = async (debtId: string, amount: number) => {
-  const debts: Debt[] = await db.get('debts') || [];
-  const newDebts = debts.map((d) => {
-    if (d.id === debtId) {
-      return { ...d, amountPaid: d.amountPaid + amount };
-    }
-    return d;
-  });
-  await db.set('debts', newDebts);
-};
-
-export const forgiveDebtAPI = async (debtId: string) => {
-  const debts: Debt[] = await db.get('debts') || [];
-  const newDebts = debts.map((d) => {
-    if (d.id === debtId) {
-      return { ...d, forgiven: true };
-    }
-    return d;
-  });
   await db.set('debts', newDebts);
 };

@@ -22,7 +22,6 @@ export type Debt = {
   name: string;
   description: string;
   toPayAmount: number;
-  amountPaid: number;
   date: number;
   forgiven: boolean;
 };

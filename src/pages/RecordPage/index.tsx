@@ -23,6 +23,7 @@ const schema = yup
     date: yup.date().required(),
     type: yup.string().oneOf(['income', 'expense', 'transfer']).required(),
     transferAccountId: yup.string(),
+    debtId: yup.string(),
   })
   .test((data, ctx) => {
     if (data.accountId === data.transferAccountId) {
@@ -54,6 +55,7 @@ const RecordPage = () => {
       methods.setValue('date', moment.unix(data.date).toDate());
       methods.setValue('type', data.type);
       methods.setValue('transferAccountId', data.transferAccountId);
+      methods.setValue('debtId', data.debtId);
     },
   });
 

@@ -7,7 +7,7 @@ import {
   IonList,
   useIonViewDidLeave,
 } from '@ionic/react';
-import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { trashBinSharp, pencilSharp, arrowForward } from 'ionicons/icons';
 import moment from 'moment';
 import { useHistory } from 'react-router';
@@ -98,14 +98,12 @@ const SlidingItem: FC<{ record: Record; accounts: Account[] }> = ({ record, acco
         <div className="flex gap-3 justify-between py-3 w-full">
           <div className="flex flex-col">
             <div className="text-md">{record.type === 'transfer' ? `Transfer` : record.name}</div>
-            {record.type === 'transfer' ? (
+            {record.type === 'transfer' && (
               <div className="flex gap-1 items-center text-sm text-slate-400">
                 <div>{fromAccount?.name}</div>
                 <IonIcon icon={arrowForward} />
                 <div className="font-bold">{toAccount?.name}</div>
               </div>
-            ) : (
-              ''
             )}
           </div>
           <div className="flex flex-col text-end">

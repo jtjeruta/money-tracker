@@ -12,7 +12,9 @@ describe('AccountsAPI: create account', () => {
     const result = await AccountsAPI.upsertAccountAPI(account);
     expect(result).toEqual(account);
   });
+});
 
+describe('AccountsAPI: update account', () => {
   it('should update an existing account', async () => {
     const account: Account = {
       id: '1',

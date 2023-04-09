@@ -14,11 +14,12 @@ import {
 import HomePage from './pages/HomePage';
 import RecordsPage from './pages/RecordsPage';
 import PlannedPaymentsPage from './pages/PlannedPaymentsPage';
-import DebtsPage from './pages/Debts';
+import DebtsPage from './pages/DebtsPage';
 import RecordPage from './pages/RecordPage';
 import AccountsPage from './pages/AccountsPage';
 import AccountPage from './pages/AccountPage';
 import PlannedPaymentPage from './pages/PlannedPaymentPage';
+import DebtPage from './pages/DebtPage';
 
 export type BasePage = {
   url: string;
@@ -85,9 +86,16 @@ export const appPages: AppPage[] = [
     showInMenu: true,
   },
   {
-    title: 'Update Record',
-    url: '/records/:recordId',
-    component: RecordPage,
+    title: 'New Debt',
+    url: '/debts/new',
+    component: DebtPage,
+    showInMenu: false,
+    showBackButton: true,
+  },
+  {
+    title: 'Update Debt',
+    url: '/debts/:debtId',
+    component: DebtPage,
     showInMenu: false,
     showBackButton: true,
   },
