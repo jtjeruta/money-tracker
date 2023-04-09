@@ -1,5 +1,14 @@
 import { FC, useRef } from 'react';
-import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/react';
+import {
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  useIonViewDidLeave,
+} from '@ionic/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { pencilSharp, trashBinSharp } from 'ionicons/icons';
 import moment from 'moment';
@@ -64,6 +73,10 @@ const SlidingItem: FC<{ payment: PlannedPayment }> = ({ payment }) => {
     confirm('Are you sure you want to delete this payment?', () => deleteMutation.mutate(paymentId));
   };
 
+  useIonViewDidLeave(() => {
+    slidingRef.current?.close();
+  });
+
   return (
     <IonItemSliding key={payment.id} ref={slidingRef}>
       <IonItem>
@@ -89,7 +102,6 @@ const SlidingItem: FC<{ payment: PlannedPayment }> = ({ payment }) => {
         <IonItemOption
           color="primary"
           onClick={() => {
-            slidingRef.current?.close();
             history.push(`/planned-payments/${payment.id}`);
           }}
         >

@@ -1,4 +1,13 @@
-import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList } from '@ionic/react';
+import {
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  useIonViewDidLeave,
+} from '@ionic/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { pencilSharp, trashBinSharp } from 'ionicons/icons';
 import { useHistory } from 'react-router';
@@ -7,6 +16,9 @@ import ActionButton from '../../components/ActionButton';
 import Card from '../../components/Card';
 import { useConfirm } from '../../hooks/useConfirm';
 import { formatMoney } from '../../utils/number';
+import { FC, useEffect, useRef } from 'react';
+import { Account } from '../../apis/types';
+import { useAlert } from '../../hooks/useAlert';
 
 const AccountsPage = () => {
   const queryClient = useQueryClient();
@@ -42,31 +54,55 @@ const AccountsPage = () => {
         <IonList>
           {data
             .sort((a, b) => a.name.localeCompare(b.name))
-            .map((account) => {
-              return (
-                <IonItemSliding key={account.id}>
-                  <IonItem>
-                    <IonLabel>{account.name}</IonLabel>
-                    <IonLabel className="text-right">{formatMoney(account.balance)}</IonLabel>
-                  </IonItem>
-
-                  <IonItemOptions>
-                    <IonItemOption color="primary" onClick={() => history.push(`/accounts/${account.id}`)}>
-                      <IonIcon icon={pencilSharp} className="p-3" />
-                    </IonItemOption>
-                    <IonItemOption color="danger" onClick={handleDelete(account.id)}>
-                      <IonIcon icon={trashBinSharp} className="p-3" />
-                    </IonItemOption>
-                  </IonItemOptions>
-                </IonItemSliding>
-              );
-            })}
+            .map((account) => (
+              <SlidingItem key={account.id} account={account} />
+            ))}
         </IonList>
       ) : (
         <Card>No accounts found</Card>
       )}
       <ActionButton onClick={() => history.push('/accounts/new')} />
     </div>
+  );
+};
+
+const SlidingItem: FC<{ account: Account }> = ({ account }) => {
+  const history = useHistory();
+  const queryClient = useQueryClient();
+  const alert = useAlert();
+  const confirm = useConfirm();
+  const slidingRef = useRef<HTMLIonItemSlidingElement>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAccountAPI,
+    onSuccess: async () => queryClient.invalidateQueries({ queryKey: ['list-accounts'] }),
+    onError: () => alert('Failed to delete account'),
+  });
+
+  const handleDelete = (accountId: string) => () => {
+    confirm('Are you sure you want to delete this account?', () => deleteMutation.mutate(accountId));
+  };
+
+  useIonViewDidLeave(() => {
+    slidingRef.current?.close();
+  });
+
+  return (
+    <IonItemSliding key={account.id} ref={slidingRef}>
+      <IonItem>
+        <IonLabel>{account.name}</IonLabel>
+        <IonLabel className="text-right">{formatMoney(account.balance)}</IonLabel>
+      </IonItem>
+
+      <IonItemOptions>
+        <IonItemOption color="primary" onClick={() => history.push(`/accounts/${account.id}`)}>
+          <IonIcon icon={pencilSharp} className="p-3" />
+        </IonItemOption>
+        <IonItemOption color="danger" onClick={handleDelete(account.id)}>
+          <IonIcon icon={trashBinSharp} className="p-3" />
+        </IonItemOption>
+      </IonItemOptions>
+    </IonItemSliding>
   );
 };
 
