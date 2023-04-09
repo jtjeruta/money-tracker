@@ -7,56 +7,53 @@ import {
   IonList,
   useIonViewDidLeave,
 } from '@ionic/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { trashBinSharp, pencilSharp } from 'ionicons/icons';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { trashBinSharp, pencilSharp, arrowForward } from 'ionicons/icons';
 import moment from 'moment';
 import { useHistory } from 'react-router';
 import { deleteRecordAPI, listRecordsAPI } from '../../apis/RecordsAPI';
-import { Record } from '../../apis/types';
+import { Account, Record } from '../../apis/types';
 import ActionButton from '../../components/ActionButton';
 import Card from '../../components/Card';
 import { useConfirm } from '../../hooks/useConfirm';
 import { formatMoney } from '../../utils/number';
 import { FC, useRef } from 'react';
 import { useAlert } from '../../hooks/useAlert';
+import { listAccountsAPI } from '../../apis/AccountsAPI';
+import classNames from 'classnames';
 
 const RecordsPage = () => {
-  const queryClient = useQueryClient();
   const history = useHistory();
-  const confirm = useConfirm();
-  const { isLoading, data, isError } = useQuery({
-    queryKey: ['list-records'],
-    queryFn: listRecordsAPI,
-  });
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteRecordAPI,
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ['list-records'] });
-      queryClient.invalidateQueries({ queryKey: ['list-accounts'] });
-    },
+  const [recordsQuery, accountsQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ['list-records'],
+        queryFn: listRecordsAPI,
+      },
+      {
+        queryKey: ['list-accounts'],
+        queryFn: listAccountsAPI,
+      },
+    ],
   });
-
-  const handleDelete = (id: string) => () => {
-    confirm('Are you sure you want to delete this record?', () => deleteMutation.mutate(id));
-  };
 
   return (
     <div className="flex flex-col gap-3 px-3">
-      {isError ? (
+      {recordsQuery.isError || accountsQuery.isError ? (
         <em className="text-red-500">Error...</em>
-      ) : isLoading ? (
+      ) : recordsQuery.isLoading || accountsQuery.isLoading ? (
         Array.of(5).map((_, index) => (
           <Card key={index}>
             <div className="text-md font-bold animate-pulse">Loading...</div>
           </Card>
         ))
-      ) : data.length > 0 ? (
+      ) : recordsQuery.data.length > 0 ? (
         <IonList>
-          {data
+          {recordsQuery.data
             .sort((a, b) => b.date - a.date)
             .map((record) => (
-              <SlidingItem key={record.id} record={record} />
+              <SlidingItem key={record.id} record={record} accounts={accountsQuery.data} />
             ))}
         </IonList>
       ) : (
@@ -67,12 +64,16 @@ const RecordsPage = () => {
   );
 };
 
-const SlidingItem: FC<{ record: Record }> = ({ record }) => {
+const SlidingItem: FC<{ record: Record; accounts: Account[] }> = ({ record, accounts }) => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const alert = useAlert();
   const confirm = useConfirm();
   const slidingRef = useRef<HTMLIonItemSlidingElement>(null);
+
+  const fromAccount = accounts.find((account) => account.id === record.accountId);
+  const toAccount = accounts.find((account) => account.id === record.transferAccountId);
+  const amountColor = record.type === 'expense' ? 'text-red-500' : record.type === 'income' ? 'text-green-500' : '';
 
   const deleteMutation = useMutation({
     mutationFn: deleteRecordAPI,
@@ -96,12 +97,23 @@ const SlidingItem: FC<{ record: Record }> = ({ record }) => {
       <IonItem>
         <div className="flex gap-3 justify-between py-3 w-full">
           <div className="flex flex-col">
-            <div className="text-md">{record.name}</div>
-            <div className="text-sm">{record.note}</div>
+            <div className="text-md">{record.type === 'transfer' ? `Transfer` : record.name}</div>
+            {record.type === 'transfer' ? (
+              <div className="flex gap-1 items-center text-sm text-slate-400">
+                <div>{fromAccount?.name}</div>
+                <IonIcon icon={arrowForward} />
+                <div className="font-bold">{toAccount?.name}</div>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
           <div className="flex flex-col text-end">
-            <div className="text-md">{formatMoney(record.amount)}</div>
-            <div className="text-sm">{moment(record.date * 1000).format('MMM DD')}</div>
+            <div className={classNames('text-md font-bold', amountColor)}>
+              {record.type === 'expense' ? '-' : record.type === 'income' ? '+' : ''}
+              {formatMoney(record.amount)}
+            </div>
+            <div className="text-sm text-slate-400">{moment(record.date * 1000).format('MMM DD')}</div>
           </div>
         </div>
       </IonItem>

@@ -17,7 +17,7 @@ import DateInput from '../../components/DateInput';
 const schema = yup
   .object({
     name: yup.string(),
-    amount: yup.number().required(),
+    amount: yup.number().min(0).required(),
     accountId: yup.string().required(),
     note: yup.string(),
     date: yup.date().required(),
@@ -103,7 +103,7 @@ const RecordPage = () => {
               { label: 'Transfer', value: 'transfer' },
             ]}
           />
-          <Input label="Amount" name="amount" />
+          <Input label="Amount" name="amount" type="number" />
           {methods.watch('type') === 'transfer' ? (
             <>
               <Select
